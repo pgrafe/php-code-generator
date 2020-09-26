@@ -53,6 +53,7 @@ class EnumService
                 if ($enumName === null) {
                     $enumBuildModel->addMessage('could not find valid DOMElement');
                     $enumBuildModelList[] = $enumBuildModel;
+                    $enumBuildModel->setState(BuildState::BUILD_FAILED());
 
                     continue;
                 }

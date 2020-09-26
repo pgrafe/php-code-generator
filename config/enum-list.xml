@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<enum-list xmlns="http://www.w3schools.com"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.w3schools.com ../xsd/enum-list.xsd">
+    <enum fqdn="PGrafe\PhpCodeGenerator\Enum\DoctrineType" type="string">
+        <comment>Hallo ein Kommentar</comment>
+        <comment>Noch ein Kommentar</comment>
+        <const comment="Ein Kommentar" name="ARRAY" value="array"/>
+        <const comment="Ein Kommentar" name="BIGINT" value="bigint"/>
+        <const comment="Ein Kommentar" name="BINARY" value="binary"/>
+        <const comment="Ein Kommentar" name="BLOB" value="blob"/>
+        <const comment="Ein Kommentar" name="BOOLEAN" value="boolean"/>
+        <const comment="Ein Kommentar" name="DATE_MUTABLE" value="date"/>
+        <const comment="Ein Kommentar" name="DATE_IMMUTABLE" value="date_immutable"/>
+        <const comment="Ein Kommentar" name="DATEINTERVAL" value="dateinterval"/>
+        <const comment="Ein Kommentar" name="DATETIME_MUTABLE" value="datetime"/>
+        <const comment="Ein Kommentar" name="DATETIME_IMMUTABLE" value="datetime_immutable"/>
+        <const comment="Ein Kommentar" name="DATETIMETZ_MUTABLE" value="datetimetz"/>
+        <const comment="Ein Kommentar" name="DATETIMETZ_IMMUTABLE" value="datetimetz_immutable"/>
+        <const comment="Ein Kommentar" name="DECIMAL" value="decimal"/>
+        <const comment="Ein Kommentar" name="FLOAT" value="float"/>
+        <const comment="Ein Kommentar" name="GUID" value="guid"/>
+        <const comment="Ein Kommentar" name="INTEGER" value="integer"/>
+        <const comment="Ein Kommentar" name="JSON" value="json"/>
+        <const comment="Ein Kommentar" name="OBJECT" value="object"/>
+        <const comment="Ein Kommentar" name="SIMPLE_ARRAY" value="simple_array"/>
+        <const comment="Ein Kommentar" name="SMALLINT" value="smallint"/>
+        <const comment="Ein Kommentar" name="STRING" value="string"/>
+        <const comment="Ein Kommentar" name="TEXT" value="text"/>
+        <const comment="Ein Kommentar" name="TIME_MUTABLE" value="time"/>
+        <const comment="Ein Kommentar" name="TIME_IMMUTABLE" value="time_immutable"/>
+    </enum>
+    <enum fqdn="PGrafe\PhpCodeGenerator\Enum\PhpType" type="string">
+        <comment>Und auch hier noch ein Kommentar</comment>
+        <const comment="Ein Kommentar" name="ARRAY" value="array"/>
+        <const comment="Ein Kommentar" name="INT" value="int"/>
+        <const comment="Ein Kommentar" name="FLOAT" value="float"/>
+        <const comment="Ein Kommentar" name="DATETIME" value="DateTime"/>
+        <const comment="Ein Kommentar" name="BOOL" value="bool"/>
+        <const comment="Ein Kommentar" name="STRING" value="string"/>
+    </enum>
+
+</enum-list>

@@ -4,12 +4,13 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.w3schools.com ../../xsd/enum.xsd">
     <definition fqcn="PGrafe\PhpCodeGenerator\Enum\PhpType" type="string">
-        <comment>Php types</comment>
-        <const comment="Ein Kommentar" name="ARRAY" value="array"/>
-        <const comment="Ein Kommentar" name="INT" value="int"/>
-        <const comment="Ein Kommentar" name="FLOAT" value="float"/>
-        <const comment="Ein Kommentar" name="DATETIME" value="DateTime"/>
-        <const comment="Ein Kommentar" name="BOOL" value="bool"/>
-        <const comment="Ein Kommentar" name="STRING" value="string"/>
+        <comment>php types</comment>
+        <comment>These will be mapped to Doctrine Types</comment>
+        <const comment="php array" name="ARRAY" value="array"/>
+        <const comment="php int value" name="INT" value="int"/>
+        <const comment="php float value" name="FLOAT" value="float"/>
+        <const comment="php DateTime object" name="DATETIME" value="DateTime"/>
+        <const comment="php bool value" name="BOOL" value="bool"/>
+        <const comment="php string value" name="STRING" value="string"/>
     </definition>
 </enum>

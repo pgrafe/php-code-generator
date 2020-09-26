@@ -22,59 +22,58 @@ class EnumService
     public function getEnumBuildModelList(string $path, array $ignoreNamespacePathList, array $addPathList): array
     {
         $xmlFileService = new XmlFileService();
-        $nicePath = $xmlFileService->buildNicePath($path);
         $enumBuildModelList = [];
-        $domDocumentList = $xmlFileService->getEnumDomDocumentList($nicePath);
+        $domDocumentList = $xmlFileService->getEnumDomDocumentList($path);
         if (count($domDocumentList) === 0) {
             $enumBuildModel = new EnumBuildModel();
-            $enumBuildModel->addMessage('could not find any XML file beneath: ' . $nicePath);
+            $enumBuildModel->addMessage('could not find any XML file beneath: ' . $path);
             $enumBuildModel->setState(BuildState::NO_XML_FOUND());
             $enumBuildModelList[] = $enumBuildModel;
 
             return $enumBuildModelList;
         }
         foreach ($domDocumentList as $DOMDocument) {
-                $enumBuildModel = new EnumBuildModel();
-                $enumBuildModel->setState(BuildState::READY());
-                $DOMNode = $DOMDocument->getElementsByTagName('definition')->item(0);
-                if (!$DOMNode instanceof DOMElement) {
-                    $enumBuildModel->addMessage('could not find valid DOMElement');
-                    $enumBuildModelList[] = $enumBuildModel;
-                    $enumBuildModel->setState(BuildState::BUILD_FAILED());
-
-                    continue;
-                }
-                $enumFQDN = $DOMNode->getAttribute('fqcn');
-                $enumFQDNList = explode('\\', $enumFQDN);
-                $enumName = array_pop($enumFQDNList);
-                $enumNameSpace = implode('\\', $enumFQDNList);
-                $enumFQDNList = array_diff($enumFQDNList, $ignoreNamespacePathList);
-                $enumType = $DOMNode->getAttribute('type');
-                if ($enumName === null) {
-                    $enumBuildModel->addMessage('could not find valid DOMElement');
-                    $enumBuildModelList[] = $enumBuildModel;
-                    $enumBuildModel->setState(BuildState::BUILD_FAILED());
-
-                    continue;
-                }
-                foreach ($addPathList as $offset => $_path) {
-                    array_splice($enumFQDNList, $offset, 0, [$_path]);
-                }
-                $enumPath = implode('/', $enumFQDNList) . '/';
-                $constList = $this->getConstList($DOMNode);
-                $commentList = $this->getCommentList($DOMNode);
-
-                $enumBuildModel->setBasePath($nicePath);
-                $enumBuildModel->setConstList($constList);
-                $enumBuildModel->setCommentList($commentList);
-                $enumBuildModel->setName($enumName);
-                $enumBuildModel->setType($enumType);
-                $enumBuildModel->setPath($enumPath);
-                $enumBuildModel->setNameSpace($enumNameSpace);
-                $enumBuildModel->setState(BuildState::READY());
-
+            $enumBuildModel = new EnumBuildModel();
+            $enumBuildModel->setState(BuildState::READY());
+            $DOMNode = $DOMDocument->getElementsByTagName('definition')->item(0);
+            if (!$DOMNode instanceof DOMElement) {
+                $enumBuildModel->addMessage('could not find valid DOMElement');
                 $enumBuildModelList[] = $enumBuildModel;
+                $enumBuildModel->setState(BuildState::BUILD_FAILED());
+
+                continue;
             }
+            $enumFQDN = $DOMNode->getAttribute('fqcn');
+            $enumFQDNList = explode('\\', $enumFQDN);
+            $enumName = array_pop($enumFQDNList);
+            $enumNameSpace = implode('\\', $enumFQDNList);
+            $enumFQDNList = array_diff($enumFQDNList, $ignoreNamespacePathList);
+            $enumType = $DOMNode->getAttribute('type');
+            if ($enumName === null) {
+                $enumBuildModel->addMessage('could not find valid DOMElement');
+                $enumBuildModelList[] = $enumBuildModel;
+                $enumBuildModel->setState(BuildState::BUILD_FAILED());
+
+                continue;
+            }
+            foreach ($addPathList as $offset => $_path) {
+                array_splice($enumFQDNList, $offset, 0, [$_path]);
+            }
+            $enumPath = implode('/', $enumFQDNList) . '/';
+            $constList = $this->getConstList($DOMNode);
+            $commentList = $this->getCommentList($DOMNode);
+
+            $enumBuildModel->setBasePath($path);
+            $enumBuildModel->setConstList($constList);
+            $enumBuildModel->setCommentList($commentList);
+            $enumBuildModel->setName($enumName);
+            $enumBuildModel->setType($enumType);
+            $enumBuildModel->setPath($enumPath);
+            $enumBuildModel->setNameSpace($enumNameSpace);
+            $enumBuildModel->setState(BuildState::READY());
+
+            $enumBuildModelList[] = $enumBuildModel;
+        }
 
         return $enumBuildModelList;
     }
@@ -87,6 +86,11 @@ class EnumService
     {
         foreach ($enumBuildModelList as $enumBuildModel) {
             if (!$enumBuildModel->getState()->equals(BuildState::READY())) {
+                continue;
+            }
+            if (!file_exists($enumBuildModel->getBasePath() . '/' . $enumBuildModel->getPath())) {
+                $enumBuildModel->setState(BuildState::BUILD_FAILED());
+                $enumBuildModel->addMessage('Path does not exist "' . $enumBuildModel->getBasePath() . '/' . $enumBuildModel->getPath() . '"');
                 continue;
             }
             $classBuilder = new ClassBuilder();
@@ -176,9 +180,13 @@ class EnumService
             $classBuilder->addContentLine('return $this->value;');
             $classBuilder->addContentLine('}');
 
-            file_put_contents($enumBuildModel->getFilePath(), $classBuilder->buildClass());
-            $enumBuildModel->setState(BuildState::SUCCESS());
-            $enumBuildModel->addMessage('successfully build in "' . $enumBuildModel->getPath() . '"');
+            if (file_put_contents($enumBuildModel->getFilePath(), $classBuilder->buildClass()) === false) {
+                $enumBuildModel->setState(BuildState::BUILD_FAILED());
+                $enumBuildModel->addMessage('could not write file "' . $enumBuildModel->getFilePath() . '"');
+            } else {
+                $enumBuildModel->setState(BuildState::SUCCESS());
+                $enumBuildModel->addMessage('successfully build in "' . $enumBuildModel->getFilePath() . '"');
+            }
         }
     }
 

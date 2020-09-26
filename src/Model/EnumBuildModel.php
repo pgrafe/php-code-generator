@@ -163,7 +163,7 @@ class EnumBuildModel
      */
     public function getFilePath(): string
     {
-        return $this->getBasePath() . $this->getPath() . $this->getName() . '.php';
+        return $this->getBasePath() . '/' . $this->getPath() . $this->getName() . '.php';
     }
 
     /**

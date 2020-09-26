@@ -15,25 +15,6 @@ class XmlFileService
 
     /**
      * @param string $path
-     * @return string
-     */
-    public function buildNicePath(string $path): string
-    {
-        $nicePathList = [];
-        $pathList = explode('/', $path);
-        foreach ($pathList as $_path) {
-            if ($_path === '..') {
-                array_pop($nicePathList);
-            } else {
-                $nicePathList[] = $_path;
-            }
-        }
-
-        return implode('/', $nicePathList);
-    }
-
-    /**
-     * @param string $path
      * @return array
      */
     public function getEnumXmlFileList(string $path): array

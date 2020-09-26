@@ -9,6 +9,7 @@ use InvalidArgumentException;
 
 /**
  * Types uses by Doctrine
+ * These will be mapped to php types
  */
 class DoctrineType
 {

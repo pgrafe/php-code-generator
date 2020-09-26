@@ -8,7 +8,8 @@ use InvalidArgumentException;
 
 
 /**
- * Php types
+ * php types
+ * These will be mapped to Doctrine Types
  */
 class PhpType
 {
@@ -19,13 +20,13 @@ class PhpType
     private string $value;
 
     /**
-     * Ein Kommentar
+     * php array
      * @var string
      */
     private const ARRAY = 'array';
 
     /**
-     * Ein Kommentar
+     * php array
      * @return PhpType
      */
     public static function ARRAY(): PhpType
@@ -34,13 +35,13 @@ class PhpType
     }
 
     /**
-     * Ein Kommentar
+     * php int value
      * @var string
      */
     private const INT = 'int';
 
     /**
-     * Ein Kommentar
+     * php int value
      * @return PhpType
      */
     public static function INT(): PhpType
@@ -49,13 +50,13 @@ class PhpType
     }
 
     /**
-     * Ein Kommentar
+     * php float value
      * @var string
      */
     private const FLOAT = 'float';
 
     /**
-     * Ein Kommentar
+     * php float value
      * @return PhpType
      */
     public static function FLOAT(): PhpType
@@ -64,13 +65,13 @@ class PhpType
     }
 
     /**
-     * Ein Kommentar
+     * php DateTime object
      * @var string
      */
     private const DATETIME = 'DateTime';
 
     /**
-     * Ein Kommentar
+     * php DateTime object
      * @return PhpType
      */
     public static function DATETIME(): PhpType
@@ -79,13 +80,13 @@ class PhpType
     }
 
     /**
-     * Ein Kommentar
+     * php bool value
      * @var string
      */
     private const BOOL = 'bool';
 
     /**
-     * Ein Kommentar
+     * php bool value
      * @return PhpType
      */
     public static function BOOL(): PhpType
@@ -94,13 +95,13 @@ class PhpType
     }
 
     /**
-     * Ein Kommentar
+     * php string value
      * @var string
      */
     private const STRING = 'string';
 
     /**
-     * Ein Kommentar
+     * php string value
      * @return PhpType
      */
     public static function STRING(): PhpType

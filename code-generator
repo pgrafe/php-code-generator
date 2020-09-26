@@ -10,7 +10,10 @@ require __DIR__ . '/vendor/autoload.php';
 use Minicli\App;
 
 $app = new App([
-    'app_path' => __DIR__ . '/cli/Command'
+    'app_path' => __DIR__ . '/cli/Command',
+    'debug' => true,
 ]);
+
+$app->setSignature('./code-generator help');
 
 $app->runCommand($argv);

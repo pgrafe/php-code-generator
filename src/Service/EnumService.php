@@ -70,7 +70,7 @@ class EnumService
                 $enumBuildModel->setType($enumType);
                 $enumBuildModel->setPath($enumPath);
                 $enumBuildModel->setNameSpace($enumNameSpace);
-                $enumBuildModel->setState(BuildState::SUCCESS());
+                $enumBuildModel->setState(BuildState::READY());
 
                 $enumBuildModelList[] = $enumBuildModel;
             }
@@ -80,9 +80,9 @@ class EnumService
 
     /**
      * @param EnumBuildModel[] $enumBuildModelList
-     * @return bool
+     * @return void
      */
-    public function buildEnumList(array $enumBuildModelList): bool
+    public function buildEnumList(array $enumBuildModelList): void
     {
         foreach ($enumBuildModelList as $enumBuildModel) {
             if (!$enumBuildModel->getState()->equals(BuildState::READY())) {
@@ -177,9 +177,8 @@ class EnumService
 
             file_put_contents($enumBuildModel->getFilePath(), $classBuilder->buildClass());
             $enumBuildModel->setState(BuildState::SUCCESS());
+            $enumBuildModel->addMessage('successfully build in "' . $enumBuildModel->getPath() . '"');
         }
-
-        return true;
     }
 
     /**

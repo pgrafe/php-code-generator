@@ -30,15 +30,15 @@ class EnumService
             return $enumBuildModelList;
         }
         foreach ($domDocumentList as $DOMDocument) {
-            foreach ($DOMDocument->getElementsByTagName('enum') as $DOMNode) {
                 $enumBuildModel = new EnumBuildModel();
+                $DOMNode = $DOMDocument->getElementsByTagName('definition')->item(0);
                 if (!$DOMNode instanceof DOMElement) {
                     $enumBuildModel->addMessage('could not find valid DOMElement');
                     $enumBuildModelList[] = $enumBuildModel;
 
                     continue;
                 }
-                $enumFQDN = $DOMNode->getAttribute('fqdn');
+                $enumFQDN = $DOMNode->getAttribute('fqcn');
                 $enumFQDNList = explode('\\', $enumFQDN);
                 $enumName = array_pop($enumFQDNList);
                 $enumNameSpace = implode('\\', $enumFQDNList);
@@ -68,7 +68,6 @@ class EnumService
 
                 $enumBuildModelList[] = $enumBuildModel;
             }
-        }
 
         return $enumBuildModelList;
     }

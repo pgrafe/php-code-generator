@@ -32,7 +32,7 @@ class XmlFileService
             }
 
             // Only consume files of interest.
-            return strpos($current->getFilename(), 'enum-list.xml') === 0;
+            return strpos($current->getFilename(), '.pgcg.xml') !== false;
         }
         );
         $iterator  = new RecursiveIteratorIterator($filter);

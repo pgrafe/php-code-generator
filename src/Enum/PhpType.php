@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 
 /**
- * Und auch hier noch ein Kommentar
+ * Php types
  */
 class PhpType
 {

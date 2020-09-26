@@ -8,8 +8,7 @@ use InvalidArgumentException;
 
 
 /**
- * Hallo ein Kommentar
- * Noch ein Kommentar
+ * Types uses by Doctrine
  */
 class DoctrineType
 {
@@ -408,7 +407,7 @@ class DoctrineType
         $constList['TEXT'] = self::TEXT;
         $constList['TIME_MUTABLE'] = self::TIME_MUTABLE;
         $constList['TIME_IMMUTABLE'] = self::TIME_IMMUTABLE;
-
+        
         return $constList;
     }
 

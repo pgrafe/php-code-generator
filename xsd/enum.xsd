@@ -5,10 +5,10 @@
            xmlns="http://www.w3schools.com"
            elementFormDefault="qualified">
 
-    <xs:element name="enum-list">
+    <xs:element name="enum">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="enum" maxOccurs="unbounded">
+                <xs:element name="definition">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="comment" maxOccurs="10"/>
@@ -32,7 +32,7 @@
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
-                        <xs:attribute name="fqdn" use="required">
+                        <xs:attribute name="fqcn" use="required">
                             <xs:simpleType>
                                 <xs:restriction base="xs:string">
                                     <xs:pattern value="([a-zA-Z\\])+"/>

@@ -4,6 +4,8 @@
 namespace PGrafe\PhpCodeGenerator\Model;
 
 
+use PGrafe\PhpCodeGenerator\Enum\BuildState;
+
 class EnumBuildModel
 {
 
@@ -39,11 +41,11 @@ class EnumBuildModel
     /**
      * @var string[]
      */
-    private array $message_list;
+    private array $message_list = [];
     /**
-     * @var bool
+     * @var BuildState
      */
-    private bool $status = false;
+    private BuildState $state;
     /**
      * @var string[]
      */
@@ -192,19 +194,19 @@ class EnumBuildModel
     }
 
     /**
-     * @return bool
+     * @return BuildState
      */
-    public function getStatus(): bool
+    public function getState(): BuildState
     {
-        return $this->status;
+        return $this->state;
     }
 
     /**
-     * @param bool $status
+     * @param BuildState $state
      */
-    public function setStatus(bool $status): void
+    public function setState(BuildState $state): void
     {
-        $this->status = $status;
+        $this->state = $state;
     }
 
     /**

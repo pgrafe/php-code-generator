@@ -1,0 +1,24 @@
+{
+  "name": "pgrafe/php-code-generator",
+  "description": "Minicli Application Template",
+  "license": "MIT",
+  "homepage": "https://github.com/pgrafe/php-code-generator",
+  "keywords": [
+    "cli",
+    "command-line",
+    "php",
+    "generator",
+    "code"
+  ],
+  "autoload": {
+    "psr-4": {
+      "PGrafe\\PhpCodeGenerator\\": "src",
+      "PGrafe\\PhpCodeGenerator\\Cli\\": "cli"
+    }
+  },
+  "require": {
+    "minicli/minicli": "^2.0",
+    "ext-dom": "*",
+    "ext-mbstring": "*"
+  }
+}

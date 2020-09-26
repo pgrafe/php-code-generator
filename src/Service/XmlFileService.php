@@ -15,12 +15,31 @@ class XmlFileService
 
     /**
      * @param string $path
+     * @return string
+     */
+    public function buildNicePath(string $path): string
+    {
+        $nicePathList = [];
+        $pathList = explode('/', $path);
+        foreach ($pathList as $_path) {
+            if ($_path === '..') {
+                array_pop($nicePathList);
+            } else {
+                $nicePathList[] = $_path;
+            }
+        }
+
+        return implode('/', $nicePathList);
+    }
+
+    /**
+     * @param string $path
      * @return array
      */
     public function getEnumXmlFileList(string $path): array
     {
         $directory = new RecursiveDirectoryIterator($path, FilesystemIterator::FOLLOW_SYMLINKS);
-        $filter    = new RecursiveCallbackFilterIterator(
+        $filter = new RecursiveCallbackFilterIterator(
             $directory, function ($current, $key, $iterator) {
             // Skip hidden files and directories.
             if ($current->getFilename()[0] === '.') {
@@ -35,8 +54,8 @@ class XmlFileService
             return strpos($current->getFilename(), '.pgcg.xml') !== false;
         }
         );
-        $iterator  = new RecursiveIteratorIterator($filter);
-        $fileList  = [];
+        $iterator = new RecursiveIteratorIterator($filter);
+        $fileList = [];
         foreach ($iterator as $info) {
             $fileList[] = $info->getPathname();
         }
@@ -68,7 +87,7 @@ class XmlFileService
     public function findModuleFolder(string $path): string
     {
         $directory = new RecursiveDirectoryIterator($path, FilesystemIterator::FOLLOW_SYMLINKS);
-        $filter    = new RecursiveCallbackFilterIterator(
+        $filter = new RecursiveCallbackFilterIterator(
             $directory, function ($current, $key, $iterator) {
             // Recursion
             if ($iterator->hasChildren()) {
@@ -90,8 +109,8 @@ class XmlFileService
             return ($pathNameList[1] === 'module');
         }
         );
-        $iterator  = new RecursiveIteratorIterator($filter);
-        $fileList  = [];
+        $iterator = new RecursiveIteratorIterator($filter);
+        $fileList = [];
         foreach ($iterator as $info) {
             $fileList[] = $info->getPathname();
         }
@@ -126,7 +145,7 @@ class XmlFileService
     private function getDoctrineXmlFileList(string $path): array
     {
         $directory = new RecursiveDirectoryIterator($path, FilesystemIterator::FOLLOW_SYMLINKS);
-        $filter    = new RecursiveCallbackFilterIterator(
+        $filter = new RecursiveCallbackFilterIterator(
             $directory, function ($current, $key, $iterator) {
             // Skip hidden files and directories.
             if ($current->getFilename()[0] === '.') {
@@ -141,8 +160,8 @@ class XmlFileService
             return strpos($current->getFilename(), '.dcm.xml') !== false;
         }
         );
-        $iterator  = new RecursiveIteratorIterator($filter);
-        $fileList  = [];
+        $iterator = new RecursiveIteratorIterator($filter);
+        $fileList = [];
         foreach ($iterator as $info) {
             $fileList[] = $info->getPathname();
         }

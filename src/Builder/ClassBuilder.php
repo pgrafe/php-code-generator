@@ -1,7 +1,7 @@
 <?php
 
 
-namespace PGrafe\PhpPGrafe\PhpCodeGenerator\Builder;
+namespace PGrafe\PhpCodeGenerator\Builder;
 
 
 class ClassBuilder

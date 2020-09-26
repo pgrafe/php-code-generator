@@ -5,9 +5,11 @@ namespace PGrafe\PhpCodeGenerator\Service;
 
 
 use DOMElement;
+use PGrafe\PhpCodeGenerator\Builder\ClassBuilder;
+use PGrafe\PhpCodeGenerator\Enum\BuildState;
 use PGrafe\PhpCodeGenerator\Model\EnumBuildModel;
 use PGrafe\PhpCodeGenerator\Model\EnumConstModel;
-use PGrafe\PhpPGrafe\PhpCodeGenerator\Builder\ClassBuilder;
+
 
 class EnumService
 {
@@ -19,22 +21,26 @@ class EnumService
      */
     public function getEnumBuildModelList(string $path, array $ignoreNamespacePathList, array $addPathList): array
     {
-        $enumBuildModelList = [];
         $xmlFileService = new XmlFileService();
-        $domDocumentList = $xmlFileService->getEnumDomDocumentList($path);
+        $nicePath = $xmlFileService->buildNicePath($path);
+        $enumBuildModelList = [];
+        $domDocumentList = $xmlFileService->getEnumDomDocumentList($nicePath);
         if (count($domDocumentList) === 0) {
             $enumBuildModel = new EnumBuildModel();
-            $enumBuildModel->addMessage('could not find any XML file beneath: ' . $path);
+            $enumBuildModel->addMessage('could not find any XML file beneath: ' . $nicePath);
+            $enumBuildModel->setState(BuildState::NO_XML_FOUND());
             $enumBuildModelList[] = $enumBuildModel;
 
             return $enumBuildModelList;
         }
         foreach ($domDocumentList as $DOMDocument) {
                 $enumBuildModel = new EnumBuildModel();
+                $enumBuildModel->setState(BuildState::READY());
                 $DOMNode = $DOMDocument->getElementsByTagName('definition')->item(0);
                 if (!$DOMNode instanceof DOMElement) {
                     $enumBuildModel->addMessage('could not find valid DOMElement');
                     $enumBuildModelList[] = $enumBuildModel;
+                    $enumBuildModel->setState(BuildState::BUILD_FAILED());
 
                     continue;
                 }
@@ -57,14 +63,14 @@ class EnumService
                 $constList = $this->getConstList($DOMNode);
                 $commentList = $this->getCommentList($DOMNode);
 
-                $enumBuildModel->setBasePath($path);
+                $enumBuildModel->setBasePath($nicePath);
                 $enumBuildModel->setConstList($constList);
                 $enumBuildModel->setCommentList($commentList);
                 $enumBuildModel->setName($enumName);
                 $enumBuildModel->setType($enumType);
                 $enumBuildModel->setPath($enumPath);
                 $enumBuildModel->setNameSpace($enumNameSpace);
-                $enumBuildModel->setStatus(true);
+                $enumBuildModel->setState(BuildState::SUCCESS());
 
                 $enumBuildModelList[] = $enumBuildModel;
             }
@@ -79,7 +85,7 @@ class EnumService
     public function buildEnumList(array $enumBuildModelList): bool
     {
         foreach ($enumBuildModelList as $enumBuildModel) {
-            if (!$enumBuildModel->getStatus()) {
+            if (!$enumBuildModel->getState()->equals(BuildState::READY())) {
                 continue;
             }
             $classBuilder = new ClassBuilder();
@@ -170,6 +176,7 @@ class EnumService
             $classBuilder->addContentLine('}');
 
             file_put_contents($enumBuildModel->getFilePath(), $classBuilder->buildClass());
+            $enumBuildModel->setState(BuildState::SUCCESS());
         }
 
         return true;

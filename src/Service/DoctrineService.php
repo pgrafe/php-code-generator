@@ -3,13 +3,13 @@
 
 namespace PGrafe\PhpCodeGenerator\Service;
 
-
+use PGrafe\PhpCodeGenerator\Builder\ClassBuilder;
 use PGrafe\PhpCodeGenerator\Enum\DoctrineType;
 use PGrafe\PhpCodeGenerator\Enum\PhpType;
 use PGrafe\PhpCodeGenerator\Model\DoctrineBuildModel;
 use DateTime;
 use DOMElement;
-use PGrafe\PhpPGrafe\PhpCodeGenerator\Builder\ClassBuilder;
+
 
 class DoctrineService
 {

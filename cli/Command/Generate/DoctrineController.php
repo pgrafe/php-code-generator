@@ -4,9 +4,9 @@ namespace PGrafe\PhpCodeGenerator\Cli\Command\Generate;
 
 use Minicli\Command\CommandController;
 use PGrafe\PhpCodeGenerator\Cli\Helper\PrinterHelper;
-use PGrafe\PhpCodeGenerator\Service\EnumService;
+use PGrafe\PhpCodeGenerator\Service\DoctrineService;
 
-class EnumController extends CommandController
+class DoctrineController extends CommandController
 {
     /**
      *
@@ -24,11 +24,11 @@ class EnumController extends CommandController
 
             return;
         }
-        $enumService = new EnumService();
-        $enumBuildModelList = $enumService->getEnumBuildModelList($path, [], [0 => 'src']);
-        $this->getPrinter()->display('Found ' . count($enumBuildModelList) . ' enum(s) to build');
-        $enumService->buildEnumList($enumBuildModelList);
+        $doctrineService = new DoctrineService();
+        $doctrineBuildModelList = $doctrineService->getDoctrineBuildModelList($path, [], [0 => 'src']);
+        $this->getPrinter()->display('Found ' . count($doctrineBuildModelList) . ' entitie(s) to build');
+        $doctrineService->buildDoctrineList($doctrineBuildModelList);
         $printerHelper = new PrinterHelper();
-        $printerHelper->displayEnumResult($this->getPrinter(), $enumBuildModelList);
+        $printerHelper->displayDoctrineResult($this->getPrinter(), $doctrineBuildModelList);
     }
 }

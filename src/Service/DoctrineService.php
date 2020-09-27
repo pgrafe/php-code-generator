@@ -4,6 +4,7 @@
 namespace PGrafe\PhpCodeGenerator\Service;
 
 use PGrafe\PhpCodeGenerator\Builder\ClassBuilder;
+use PGrafe\PhpCodeGenerator\Enum\BuildState;
 use PGrafe\PhpCodeGenerator\Enum\DoctrineType;
 use PGrafe\PhpCodeGenerator\Enum\PhpType;
 use PGrafe\PhpCodeGenerator\Model\DoctrineBuildModel;
@@ -16,9 +17,11 @@ class DoctrineService
 
     /**
      * @param string $path
+     * @param array $ignoreNamespacePathList
+     * @param array $addPathList
      * @return DoctrineBuildModel[]
      */
-    public function getDoctrineBuildModelList(string $path): array
+    public function getDoctrineBuildModelList(string $path, array $ignoreNamespacePathList, array $addPathList): array
     {
         $doctrineBuildModelList = [];
         $xmlFileService         = new XmlFileService();
@@ -26,6 +29,7 @@ class DoctrineService
         if (count($domDocumentList) === 0) {
             $doctrineBuildModel = new DoctrineBuildModel();
             $doctrineBuildModel->addMessage('could not find any XML file beneath: ' . $path);
+            $doctrineBuildModel->setState(BuildState::NO_XML_FOUND());
             $doctrineBuildModelList[] = $doctrineBuildModel;
 
             return $doctrineBuildModelList;
@@ -36,21 +40,26 @@ class DoctrineService
                 if (!$DOMNode instanceof DOMElement) {
                     $doctrineBuildModel->addMessage('could not find valid DOMElement');
                     $doctrineBuildModelList[] = $doctrineBuildModel;
+                    $doctrineBuildModel->setState(BuildState::BUILD_FAILED());
 
                     continue;
                 }
-                $entityFQDN      = $DOMNode->getAttribute('name');
-                $entityFQDNList  = explode('\\', $entityFQDN);
-                $entityName      = array_pop($entityFQDNList);
-                $entityNameSpace = implode('\\', $entityFQDNList);
+                $entityFQCN      = $DOMNode->getAttribute('name');
+                $entityFQCNList  = explode('\\', $entityFQCN);
+                $entityName      = array_pop($entityFQCNList);
+                $entityNameSpace = implode('\\', $entityFQCNList);
+                $entityFQCNList = array_diff($entityFQCNList, $ignoreNamespacePathList);
                 if ($entityName === null) {
                     $doctrineBuildModel->addMessage('could not find valid DOMElement');
+                    $doctrineBuildModel->setState(BuildState::BUILD_FAILED());
                     $doctrineBuildModelList[] = $doctrineBuildModel;
 
                     continue;
                 }
-                array_splice($entityFQDNList, 1, 0, ['src']);
-                $entityPath = implode('/', $entityFQDNList) . '/';
+                foreach ($addPathList as $offset => $_path) {
+                    array_splice($entityFQCNList, $offset, 0, [$_path]);
+                }
+                $entityPath = implode('/', $entityFQCNList) . '/';
                 $fieldList  = $this->getFieldList($DOMNode);
 
                 $doctrineBuildModel->setBasePath($path);
@@ -58,12 +67,12 @@ class DoctrineService
                 $doctrineBuildModel->setName($entityName);
                 $doctrineBuildModel->setPath($entityPath);
                 $doctrineBuildModel->setNameSpace($entityNameSpace);
-                $doctrineBuildModel->setStatus(true);
+                $doctrineBuildModel->setState(BuildState::READY());
 
                 $doctrineAbstractBuildModel = clone $doctrineBuildModel;
-                $doctrineAbstractBuildModel->setName($doctrineBuildModel->getName() . 'Generated');
-                $doctrineAbstractBuildModel->setNameSpace($doctrineBuildModel->getNameSpace() . '\Generated');
-                $doctrineAbstractBuildModel->setPath($doctrineBuildModel->getPath() . 'Generated/');
+                $doctrineAbstractBuildModel->setName($doctrineBuildModel->getName() . 'Extract');
+                $doctrineAbstractBuildModel->setNameSpace($doctrineBuildModel->getNameSpace() . '\Extract');
+                $doctrineAbstractBuildModel->setPath($doctrineBuildModel->getPath() . 'Extract/');
 
                 $doctrineBuildModel->setFieldList([]);
                 $doctrineBuildModel->addExtends($doctrineAbstractBuildModel->getNameSpace() . '\\' . $doctrineAbstractBuildModel->getName());
@@ -82,7 +91,12 @@ class DoctrineService
     public function buildDoctrineList(array $doctrineBuildModelList): bool
     {
         foreach ($doctrineBuildModelList as $doctrineBuildModel) {
-            if (!$doctrineBuildModel->getStatus()) {
+            if (!$doctrineBuildModel->getState()->equals(BuildState::READY())) {
+                continue;
+            }
+            if (!file_exists($doctrineBuildModel->getBasePath() . '/' . $doctrineBuildModel->getPath())) {
+                $doctrineBuildModel->setState(BuildState::BUILD_FAILED());
+                $doctrineBuildModel->addMessage('Path does not exist "' . $doctrineBuildModel->getBasePath() . '/' . $doctrineBuildModel->getPath() . '"');
                 continue;
             }
             $classBuilder = new ClassBuilder();
@@ -101,7 +115,14 @@ class DoctrineService
                 $classBuilder->addCommentBlock(['@var ' . $phpType->getValue()]);
                 $classBuilder->addContentLine('protected ' . $phpType->getValue() . ' $' . $_fieldName . ';');
             }
-            file_put_contents($doctrineBuildModel->getFilePath(), $classBuilder->buildClass());
+            if (file_put_contents($doctrineBuildModel->getFilePath(), $classBuilder->buildClass()) === false) {
+                $doctrineBuildModel->setState(BuildState::BUILD_FAILED());
+                $doctrineBuildModel->addMessage('failed: ' . $doctrineBuildModel->getFilePath());
+            } else {
+                $doctrineBuildModel->setState(BuildState::SUCCESS());
+                $doctrineBuildModel->addMessage('success: ' . $doctrineBuildModel->getFilePath());
+            }
+
         }
 
         return true;

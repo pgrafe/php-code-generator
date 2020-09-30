@@ -99,6 +99,11 @@ class DoctrineService
                 $doctrineBuildModel->addMessage('Path does not exist "' . $doctrineBuildModel->getBasePath() . '/' . $doctrineBuildModel->getPath() . '"');
                 continue;
             }
+            if (file_exists($doctrineBuildModel->getFilePath())) {
+                $doctrineBuildModel->setState(BuildState::SUCCESS());
+                $doctrineBuildModel->addMessage('File already exists "' . $doctrineBuildModel->getBasePath() . '/' . $doctrineBuildModel->getPath() . '"');
+                continue;
+            }
             $classBuilder = new ClassBuilder();
             $classBuilder->setNameSpace($doctrineBuildModel->getNameSpace());
             $classBuilder->setClassName($doctrineBuildModel->getName());

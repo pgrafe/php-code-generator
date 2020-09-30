@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3287a40df6b5179c9fd3d04c9c9f690f",
+    "content-hash": "134eb514f437ce782f47a188f07db0f6",
     "packages": [
         {
             "name": "minicli/minicli",
@@ -61,7 +61,10 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-dom": "*",
+        "ext-mbstring": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "1.1.0"
 }

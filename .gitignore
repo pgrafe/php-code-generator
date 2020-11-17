@@ -1,2 +1,7 @@
 .idea
 vendor/
+!/testarea/src/Application/Enum/.gitkeep
+!/testarea/src/Application/Entity/Extract/.gitkeep
+/testarea/src/Application/Enum/*
+/testarea/src/Application/Entity/*
+/testarea/src/Application/Entity/Extract/*

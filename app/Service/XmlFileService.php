@@ -83,7 +83,7 @@ class XmlFileService
                 return false;
             }
 
-            $pathNameList = explode('/', $current->getPathname());
+            $pathNameList = explode(DIRECTORY_SEPARATOR, $current->getPathname());
             $pathNameList = array_reverse($pathNameList);
 
             // Only consume directories of interest.

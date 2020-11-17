@@ -11,5 +11,6 @@
 
         <field name="name" type="string"/>
         <field name="test" type="string"/>
+        <field name="date" type="datetime"/>
     </entity>
 </doctrine-mapping>

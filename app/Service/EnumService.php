@@ -59,7 +59,7 @@ class EnumService
             foreach ($addPathList as $offset => $_path) {
                 array_splice($enumFQDNList, $offset, 0, [$_path]);
             }
-            $enumPath = implode('/', $enumFQDNList) . '/';
+            $enumPath = implode(DIRECTORY_SEPARATOR, $enumFQDNList) . DIRECTORY_SEPARATOR;
             $constList = $this->getConstList($DOMNode);
             $commentList = $this->getCommentList($DOMNode);
 
@@ -88,9 +88,9 @@ class EnumService
             if (!$enumBuildModel->getState()->equals(BuildState::READY())) {
                 continue;
             }
-            if (!file_exists($enumBuildModel->getBasePath() . '/' . $enumBuildModel->getPath())) {
+            if (!file_exists($enumBuildModel->getBasePath() . DIRECTORY_SEPARATOR . $enumBuildModel->getPath())) {
                 $enumBuildModel->setState(BuildState::BUILD_FAILED());
-                $enumBuildModel->addMessage('Path does not exist "' . $enumBuildModel->getBasePath() . '/' . $enumBuildModel->getPath() . '"');
+                $enumBuildModel->addMessage('Path does not exist "' . $enumBuildModel->getBasePath() . DIRECTORY_SEPARATOR . $enumBuildModel->getPath() . '"');
                 continue;
             }
             $classBuilder = new ClassBuilder();

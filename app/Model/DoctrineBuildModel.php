@@ -131,7 +131,7 @@ class DoctrineBuildModel
      */
     public function getFilePath(): string
     {
-        return $this->getBasePath() . '/' . $this->getPath() . $this->getName() . '.php';
+        return $this->getBasePath() . DIRECTORY_SEPARATOR . $this->getPath() . $this->getName() . '.php';
     }
 
     /**

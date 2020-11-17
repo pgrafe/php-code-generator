@@ -59,7 +59,7 @@ class DoctrineService
                 foreach ($addPathList as $offset => $_path) {
                     array_splice($entityFQCNList, $offset, 0, [$_path]);
                 }
-                $entityPath = implode('/', $entityFQCNList) . '/';
+                $entityPath = implode(DIRECTORY_SEPARATOR, $entityFQCNList) . DIRECTORY_SEPARATOR;
                 $fieldList  = $this->getFieldList($DOMNode);
 
                 $doctrineBuildModel->setBasePath($path);
@@ -94,14 +94,14 @@ class DoctrineService
             if (!$doctrineBuildModel->getState()->equals(BuildState::READY())) {
                 continue;
             }
-            if (!file_exists($doctrineBuildModel->getBasePath() . '/' . $doctrineBuildModel->getPath())) {
+            if (!file_exists($doctrineBuildModel->getBasePath() . DIRECTORY_SEPARATOR . $doctrineBuildModel->getPath())) {
                 $doctrineBuildModel->setState(BuildState::BUILD_FAILED());
-                $doctrineBuildModel->addMessage('Path does not exist "' . $doctrineBuildModel->getBasePath() . '/' . $doctrineBuildModel->getPath() . '"');
+                $doctrineBuildModel->addMessage('Path does not exist "' . $doctrineBuildModel->getBasePath() . DIRECTORY_SEPARATOR . $doctrineBuildModel->getPath() . '"');
                 continue;
             }
             if (file_exists($doctrineBuildModel->getFilePath())) {
                 $doctrineBuildModel->setState(BuildState::SUCCESS());
-                $doctrineBuildModel->addMessage('File already exists "' . $doctrineBuildModel->getBasePath() . '/' . $doctrineBuildModel->getPath() . '"');
+                $doctrineBuildModel->addMessage('File already exists "' . $doctrineBuildModel->getBasePath() . DIRECTORY_SEPARATOR . $doctrineBuildModel->getPath() . '"');
                 continue;
             }
             $classBuilder = new ClassBuilder();

@@ -28,7 +28,7 @@ class PrinterHelper
                     break;
                 case $enumBuildModel->getState()->equals(BuildState::BUILD_FAILED()):
                     $outputHandler->error('Build of enum failed!');
-                    $outputHandler->info('Path "' . $enumBuildModel->getBasePath() . '/' . $enumBuildModel->getPath() . '" does not exist');
+                    $outputHandler->info('Path "' . $enumBuildModel->getBasePath() . DIRECTORY_SEPARATOR . $enumBuildModel->getPath() . '" does not exist');
                     break;
                 default:
                     $outputHandler->info('State: ' . $enumBuildModel->getState()->getValue());
@@ -56,7 +56,7 @@ class PrinterHelper
                     break;
                 case $doctrineBuildModel->getState()->equals(BuildState::BUILD_FAILED()):
                     $outputHandler->error('Build of entity failed!');
-                    $outputHandler->info('Path "' . $doctrineBuildModel->getBasePath() . '/' . $doctrineBuildModel->getPath() . '" does not exist');
+                    $outputHandler->info('Path "' . $doctrineBuildModel->getBasePath() . DIRECTORY_SEPARATOR . $doctrineBuildModel->getPath() . '" does not exist');
                     break;
                 default:
                     $outputHandler->info('State: ' . $doctrineBuildModel->getState()->getValue());

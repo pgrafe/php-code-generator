@@ -1,6 +1,6 @@
 <?php
 
-namespace PGrafe\PhpCodeGenerator\Cli\Command\Generate;
+namespace PGrafe\PhpCodeGenerator\Command\Help;
 
 use Minicli\App;
 use Minicli\Command\CommandController;
@@ -8,14 +8,14 @@ use Minicli\Command\CommandController;
 class DefaultController extends CommandController
 {
     /** @var  array */
-    protected array $command_map = [];
+    protected $command_map = [];
 
     public function boot(App $app)
     {
         parent::boot($app);
         $this->command_map = $app->command_registry->getCommandMap();
     }
-
+    
     public function handle()
     {
         $this->getPrinter()->info('Available Commands');
@@ -29,7 +29,7 @@ class DefaultController extends CommandController
                 foreach ($sub as $subcommand) {
                     if ($subcommand !== 'default') {
                         $this->getPrinter()->newline();
-                        $this->getPrinter()->out(sprintf('%s%s', '└──', $subcommand));
+                        $this->getPrinter()->out(sprintf('%s%s','└──', $subcommand));
                     }
                 }
             }

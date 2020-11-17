@@ -1,6 +1,6 @@
 <?php
 
-namespace PGrafe\PhpCodeGenerator\Cli\Command\Help;
+namespace PGrafe\PhpCodeGenerator\Command\Generate;
 
 use Minicli\App;
 use Minicli\Command\CommandController;

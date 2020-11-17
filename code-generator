@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!php
 <?php
 
 if (php_sapi_name() !== 'cli') {
@@ -10,10 +10,10 @@ require __DIR__ . '/vendor/autoload.php';
 use Minicli\App;
 
 $app = new App([
-    'app_path' => __DIR__ . '/cli/Command',
-    'debug' => true,
+    'app_path' => __DIR__ . '/app/Command',
 ]);
 
 $app->setSignature('./code-generator help');
 
 $app->runCommand($argv);
+

@@ -12,13 +12,15 @@
   ],
   "autoload": {
     "psr-4": {
-      "PGrafe\\PhpCodeGenerator\\": "src",
-      "PGrafe\\PhpCodeGenerator\\Cli\\": "cli"
+      "PGrafe\\PhpCodeGenerator\\": "app"
     }
   },
   "require": {
     "minicli/minicli": "^2.0",
     "ext-dom": "*",
     "ext-mbstring": "*"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master"
   }
 }

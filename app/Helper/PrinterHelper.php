@@ -1,7 +1,7 @@
 <?php
 
 
-namespace PGrafe\PhpCodeGenerator\Cli\Helper;
+namespace PGrafe\PhpCodeGenerator\Helper;
 
 
 use Minicli\Output\OutputHandler;

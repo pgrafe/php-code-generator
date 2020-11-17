@@ -1,17 +1,15 @@
 <?php
 
-namespace PGrafe\PhpCodeGenerator\Cli\Command\Generate;
+namespace PGrafe\PhpCodeGenerator\Command\Generate;
 
+use PGrafe\PhpCodeGenerator\Helper\PrinterHelper;
 use Minicli\Command\CommandController;
-use PGrafe\PhpCodeGenerator\Cli\Helper\PrinterHelper;
 use PGrafe\PhpCodeGenerator\Service\DoctrineService;
 
 class DoctrineController extends CommandController
 {
-    /**
-     *
-     */
-    public function handle(): void
+
+    public function handle()
     {
         if (!$this->hasParam('path')) {
             $this->getPrinter()->info('Please add path=<build-path>');

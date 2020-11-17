@@ -1,16 +1,14 @@
 <?php
 
-namespace PGrafe\PhpCodeGenerator\Cli\Command\Generate;
+namespace PGrafe\PhpCodeGenerator\Command\Generate;
 
 use Minicli\Command\CommandController;
-use PGrafe\PhpCodeGenerator\Cli\Helper\PrinterHelper;
+use PGrafe\PhpCodeGenerator\Helper\PrinterHelper;
 use PGrafe\PhpCodeGenerator\Service\EnumService;
 
 class EnumController extends CommandController
 {
-    /**
-     *
-     */
+
     public function handle(): void
     {
         if (!$this->hasParam('path')) {

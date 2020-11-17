@@ -19,6 +19,11 @@ class EnumConstModel
     /**
      * @var string
      */
+    private string $nice_value;
+
+    /**
+     * @var string
+     */
     private string $comment;
 
     /**
@@ -67,6 +72,22 @@ class EnumConstModel
     public function setComment(string $comment): void
     {
         $this->comment = $comment;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNiceValue(): string
+    {
+        return $this->nice_value;
+    }
+
+    /**
+     * @param string $nice_value
+     */
+    public function setNiceValue(string $nice_value): void
+    {
+        $this->nice_value = $nice_value;
     }
 
 }

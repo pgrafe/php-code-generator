@@ -5,9 +5,9 @@
       xsi:schemaLocation="http://www.w3schools.com ../../../xsd/enum.xsd">
     <definition fqcn="Application\Enum\ApplicationState" type="int">
         <comment>State of the application</comment>
-        <const comment="Waiting" name="WAITING" value="0"/>
-        <const comment="Success" name="SUCCESS" value="1"/>
-        <const comment="Stopped" name="STOPPED" value="2"/>
+        <const comment="Waiting" name="WAITING" value="0" nice_value="Warte"/>
+        <const comment="Success" name="SUCCESS" value="1" nice_value="Erfolg"/>
+        <const comment="Stopped" name="STOPPED" value="2" nice_value="Stopp"/>
         <const comment="Crashing!" name="CRASHED" value="3"/>
     </definition>
 </enum>

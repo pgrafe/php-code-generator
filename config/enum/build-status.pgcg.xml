@@ -5,9 +5,9 @@
       xsi:schemaLocation="http://www.w3schools.com ../../xsd/enum.xsd">
     <definition fqcn="PGrafe\PhpCodeGenerator\Enum\BuildState" type="int">
         <comment>State of the build process</comment>
-        <const comment="Ready to be build" name="READY" value="0"/>
-        <const comment="Successfully build" name="SUCCESS" value="1"/>
-        <const comment="No XML data found to be processed" name="NO_XML_FOUND" value="2"/>
-        <const comment="General build failure" name="BUILD_FAILED" value="3"/>
+        <const comment="Ready to be build" name="READY" value="0" nice_value="Bereit"/>
+        <const comment="Successfully build" name="SUCCESS" value="1" nice_value="Erfolg"/>
+        <const comment="No XML data found to be processed" name="NO_XML_FOUND" value="2" nice_value="XML nicht gefunden"/>
+        <const comment="General build failure" name="BUILD_FAILED" value="3"  nice_value="Fehler!"/>
     </definition>
 </enum>

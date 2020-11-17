@@ -21,9 +21,9 @@ class EnumService
      */
     public function getEnumBuildModelList(string $path, array $ignoreNamespacePathList, array $addPathList): array
     {
-        $xmlFileService = new XmlFileService();
+        $xmlFileService     = new XmlFileService();
         $enumBuildModelList = [];
-        $domDocumentList = $xmlFileService->getEnumDomDocumentList($path);
+        $domDocumentList    = $xmlFileService->getEnumDomDocumentList($path);
         if (count($domDocumentList) === 0) {
             $enumBuildModel = new EnumBuildModel();
             $enumBuildModel->addMessage('could not find any XML file beneath: ' . $path);
@@ -43,12 +43,12 @@ class EnumService
 
                 continue;
             }
-            $enumFQDN = $DOMNode->getAttribute('fqcn');
-            $enumFQDNList = explode('\\', $enumFQDN);
-            $enumName = array_pop($enumFQDNList);
+            $enumFQDN      = $DOMNode->getAttribute('fqcn');
+            $enumFQDNList  = explode('\\', $enumFQDN);
+            $enumName      = array_pop($enumFQDNList);
             $enumNameSpace = implode('\\', $enumFQDNList);
-            $enumFQDNList = array_diff($enumFQDNList, $ignoreNamespacePathList);
-            $enumType = $DOMNode->getAttribute('type');
+            $enumFQDNList  = array_diff($enumFQDNList, $ignoreNamespacePathList);
+            $enumType      = $DOMNode->getAttribute('type');
             if ($enumName === null) {
                 $enumBuildModel->addMessage('could not find valid DOMElement');
                 $enumBuildModelList[] = $enumBuildModel;
@@ -59,8 +59,8 @@ class EnumService
             foreach ($addPathList as $offset => $_path) {
                 array_splice($enumFQDNList, $offset, 0, [$_path]);
             }
-            $enumPath = implode(DIRECTORY_SEPARATOR, $enumFQDNList) . DIRECTORY_SEPARATOR;
-            $constList = $this->getConstList($DOMNode);
+            $enumPath    = implode(DIRECTORY_SEPARATOR, $enumFQDNList) . DIRECTORY_SEPARATOR;
+            $constList   = $this->getConstList($DOMNode);
             $commentList = $this->getCommentList($DOMNode);
 
             $enumBuildModel->setBasePath($path);
@@ -122,6 +122,39 @@ class EnumService
             }
             $classBuilder->addContentLine('');
             $classBuilder->addContentLine('return $constList;');
+            $classBuilder->addContentLine('}');
+
+            $classBuilder->addCommentBlock(['@return string']);
+            $classBuilder->addContentLine('public function getNiceValue(): string');
+            $classBuilder->addContentLine('{');
+            $classBuilder->addContentLine('switch (true) {');
+            foreach ($enumBuildModel->getConstList() as $enumConstModel) {
+                if ($enumConstModel->getNiceValue() === '') {
+                    continue;
+                }
+                $classBuilder->addContentLine('case (self::' . $enumConstModel->getName() . '()->equals($this)):');
+                $classBuilder->addContentLine('{');
+                $classBuilder->addContentLine('return \'' . $enumConstModel->getNiceValue() . '\';');
+                $classBuilder->addContentLine('}');
+            }
+            $classBuilder->addContentLine('}');
+            $classBuilder->addContentLine('');
+            $classBuilder->addContentLine('return ' . ($enumBuildModel->getType() === 'int' ? '(string)' : '') . '$this->getValue();');
+            $classBuilder->addContentLine('}');
+
+            $classBuilder->addCommentBlock(['@return string[]']);
+            $classBuilder->addContentLine('public static function getNiceValueList(): array');
+            $classBuilder->addContentLine('{');
+            foreach ($enumBuildModel->getConstList() as $enumConstModel) {
+                $constIndex = ($enumBuildModel->getType() === 'string' ? '\'' : '') . $enumConstModel->getValue() . ($enumBuildModel->getType() === 'string' ? '\'' : '');
+                if ($enumConstModel->getNiceValue() === '') {
+                    $classBuilder->addContentLine('$niceValueList[' . $constIndex . '] = \'' . $enumConstModel->getValue() . '\';');
+                } else {
+                    $classBuilder->addContentLine('$niceValueList[' . $constIndex . '] = \'' . $enumConstModel->getNiceValue() . '\';');
+                }
+            }
+            $classBuilder->addContentLine('');
+            $classBuilder->addContentLine('return $niceValueList;');
             $classBuilder->addContentLine('}');
 
             $classBuilder->addCommentBlock(
@@ -205,6 +238,7 @@ class EnumService
             $enumConstModel->setName($_DOMNode->getAttribute('name'));
             $enumConstModel->setValue($_DOMNode->getAttribute('value'));
             $enumConstModel->setComment($_DOMNode->getAttribute('comment'));
+            $enumConstModel->setNiceValue($_DOMNode->getAttribute('nice_value'));
             $constList[$enumConstModel->getName()] = $enumConstModel;
         }
 

@@ -29,6 +29,7 @@
                                         </xs:simpleType>
                                     </xs:attribute>
                                     <xs:attribute name="comment" type="xs:string" use="required"/>
+                                    <xs:attribute name="nice_value" type="xs:string"/>
                                 </xs:complexType>
                             </xs:element>
                         </xs:sequence>
